@@ -24,6 +24,8 @@ namespace AgentRecruiter.ViewModels
             Matches = new ObservableCollection<Candidate>();
 
             SwipeCommand = new Command<SwipedCardEventArgs>(OnSwipe);
+
+            Title = "Swipe";
         }
 
         public async Task InitializeAsync()

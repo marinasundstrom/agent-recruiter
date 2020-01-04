@@ -6,7 +6,7 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:AgentRecruiter.ViewModels"
-    Title="Candidates"
+    Title="{Binding Title}"
     BindingContext="{x:Static vm:ViewModelLocator.Candidates}"
     mc:Ignorable="d">
     <ContentPage.Content>

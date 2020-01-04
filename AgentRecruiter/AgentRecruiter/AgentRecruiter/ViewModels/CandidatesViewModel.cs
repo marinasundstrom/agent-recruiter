@@ -16,6 +16,8 @@ namespace AgentRecruiter.ViewModels
             this.recruitmentQueryService = recruitmentQueryService;
 
             Candidates = new ObservableCollection<Candidate>();
+
+            Title = "Candidates";
         }
 
 

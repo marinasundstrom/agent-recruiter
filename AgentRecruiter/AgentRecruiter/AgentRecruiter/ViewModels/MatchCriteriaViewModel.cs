@@ -26,6 +26,8 @@ namespace AgentRecruiter.ViewModels
             SelectedTechnologies = new ObservableCollection<object>();
 
             SaveCommand = new Command(async () => await ExecuteSaveCommand());
+
+            Title = "Match Criteria";
         }
 
 

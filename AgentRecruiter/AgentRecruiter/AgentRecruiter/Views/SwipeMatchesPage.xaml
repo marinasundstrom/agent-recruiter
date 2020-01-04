@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:swipeCardView="clr-namespace:MLToolkit.Forms.SwipeCardView;assembly=MLToolkit.Forms.SwipeCardView"
     xmlns:vm="clr-namespace:AgentRecruiter.ViewModels"
-    Title="Matches"
+    Title="{Binding Title}"
     BindingContext="{x:Static vm:ViewModelLocator.SwipeMatches}"
     mc:Ignorable="d">
     <ContentPage.Content>
