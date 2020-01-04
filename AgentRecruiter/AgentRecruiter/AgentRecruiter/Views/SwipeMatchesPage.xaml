@@ -11,7 +11,7 @@
     BindingContext="{x:Static vm:ViewModelLocator.SwipeMatches}"
     mc:Ignorable="d">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="CenterAndExpand">
+        <StackLayout>
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <StackLayout IsVisible="{Binding HasNoMatches}">
                 <Label

@@ -41,7 +41,14 @@ namespace AgentRecruiter.ViewModels
 
         private void Matches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            HasNoMatches = !Matches.Any();
+            if (!Matches.Any())
+            {
+                HasNoMatches = true;
+            }
+            else
+            {
+                HasNoMatches = false;
+            }
         }
 
         public async Task InitializeAsync()
