@@ -28,6 +28,8 @@ namespace AgentRecruiter.ViewModels
 
         public async Task InitializeAsync()
         {
+            IsBusy = true;
+
             await recruitmentQueryService.InitializeAsync();
 
             var matches = await recruitmentQueryService.GetMatchingCandidatesAsync();
@@ -38,6 +40,8 @@ namespace AgentRecruiter.ViewModels
             {
                 Matches.Add(match);
             }
+
+            IsBusy = false;
         }
 
         private async void OnSwipe(SwipedCardEventArgs obj)

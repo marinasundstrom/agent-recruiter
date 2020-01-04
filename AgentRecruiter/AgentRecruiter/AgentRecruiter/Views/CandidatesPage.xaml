@@ -10,12 +10,15 @@
     BindingContext="{x:Static vm:ViewModelLocator.Candidates}"
     mc:Ignorable="d">
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Candidates}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Name.FirstName}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <StackLayout>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <ListView BackgroundColor="Transparent" ItemsSource="{Binding Candidates}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Name.FirstName}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

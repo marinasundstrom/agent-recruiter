@@ -11,6 +11,7 @@
     mc:Ignorable="d">
     <ContentPage.Content>
         <StackLayout>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <CollectionView
                 ItemsSource="{Binding AllTechnologies}"
                 SelectedItems="{Binding SelectedTechnologies, Mode=TwoWay}"

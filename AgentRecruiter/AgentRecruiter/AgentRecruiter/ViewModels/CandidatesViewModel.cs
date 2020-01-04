@@ -21,6 +21,8 @@ namespace AgentRecruiter.ViewModels
 
         public async Task InitializeAsync()
         {
+            IsBusy = true;
+
             var candidates = await recruitmentQueryService.GetAcceptedCandidatesAsync();
 
             Candidates.Clear();
@@ -29,6 +31,8 @@ namespace AgentRecruiter.ViewModels
             {
                 Candidates.Add(candidate);
             }
+
+            IsBusy = false;
         }
 
         public ObservableCollection<Candidate> Candidates { get; }

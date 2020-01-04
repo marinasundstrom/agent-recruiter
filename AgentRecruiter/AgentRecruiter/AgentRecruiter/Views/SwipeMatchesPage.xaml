@@ -11,35 +11,39 @@
     BindingContext="{x:Static vm:ViewModelLocator.SwipeMatches}"
     mc:Ignorable="d">
     <ContentPage.Content>
-        <swipeCardView:SwipeCardView
-            ItemsSource="{Binding Matches}"
-            SupportedSwipeDirections="Left, Right"
-            SwipedCommand="{Binding SwipeCommand}"
-            VerticalOptions="FillAndExpand">
-            <swipeCardView:SwipeCardView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout BackgroundColor="Beige">
-                        <Image Source="{Binding Picture}" />
-                        <Label
-                            FontSize="Large"
-                            HorizontalTextAlignment="Center"
-                            Text="{Binding Name.FirstName}"
-                            TextColor="Black"
-                            VerticalOptions="CenterAndExpand"
-                            VerticalTextAlignment="Center">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Name.FirstName}" />
-                                    <Span Text=" " />
-                                    <Span Text="{Binding Name.LastName}" />
-                                    <Span Text=", " />
-                                    <Span Text="{Binding Age}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-                    </StackLayout>
-                </DataTemplate>
-            </swipeCardView:SwipeCardView.ItemTemplate>
-        </swipeCardView:SwipeCardView>
+        <StackLayout>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <swipeCardView:SwipeCardView
+                ItemsSource="{Binding Matches}"
+                SupportedSwipeDirections="Left, Right"
+                SwipedCommand="{Binding SwipeCommand}"
+                VerticalOptions="FillAndExpand">
+                <swipeCardView:SwipeCardView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout BackgroundColor="Beige">
+                            <Image Source="{Binding Picture}" VerticalOptions="CenterAndExpand" />
+                            <Label
+                                FontSize="Large"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Name.FirstName}"
+                                TextColor="Black"
+                                VerticalOptions="CenterAndExpand"
+                                VerticalTextAlignment="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Name.FirstName}" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Name.LastName}" />
+                                        <Span Text=", " />
+                                        <Span Text="{Binding Age}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                    </DataTemplate>
+                </swipeCardView:SwipeCardView.ItemTemplate>
+            </swipeCardView:SwipeCardView>
+        </StackLayout>
+
     </ContentPage.Content>
 </ContentPage>

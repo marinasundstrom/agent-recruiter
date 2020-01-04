@@ -32,6 +32,8 @@ namespace AgentRecruiter.ViewModels
 
         public async Task InitializeAsync()
         {
+            IsBusy = true;
+
             var technologies = await recruitmentQueryService.GetTechnologiesAsync();
 
             AllTechnologies.Clear();
@@ -45,6 +47,8 @@ namespace AgentRecruiter.ViewModels
             {
                 SelectedTechnologies.Add(AllTechnologies.OfType<Technology>().First(t => t.Name == technology.Name));
             }
+
+            IsBusy = false;
         }
 
         private async Task ExecuteSaveCommand()
