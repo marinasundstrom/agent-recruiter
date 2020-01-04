@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AgentRecruiter.Views.MatchCriteriaPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:AgentRecruiter.ViewModels"
+    Title="Match Criteria"
+    BindingContext="{x:Static vm:ViewModelLocator.MatchCriteria}"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView
+                ItemsSource="{Binding AllTechnologies}"
+                SelectedItems="{Binding SelectedTechnologies, Mode=TwoWay}"
+                SelectionMode="Multiple"
+                VerticalOptions="Fill">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Name}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button
+                Command="{Binding SaveCommand}"
+                Text="Save"
+                VerticalOptions="End" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
