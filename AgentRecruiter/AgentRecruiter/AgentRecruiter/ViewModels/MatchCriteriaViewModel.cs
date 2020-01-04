@@ -2,8 +2,10 @@
 
 using RecruitmentService.Client;
 
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -15,12 +17,14 @@ namespace AgentRecruiter.ViewModels
     {
         private readonly IRecruitmentQueryService recruitmentQueryService;
         private readonly IDataService dataService;
+        private readonly IAlertService alertService;
         private ObservableCollection<object> selectedTechnologies;
 
-        public MatchCriteriaViewModel(IRecruitmentQueryService recruitmentQueryService, IDataService dataService)
+        public MatchCriteriaViewModel(IRecruitmentQueryService recruitmentQueryService, IDataService dataService, IAlertService alertService)
         {
             this.recruitmentQueryService = recruitmentQueryService;
             this.dataService = dataService;
+            this.alertService = alertService;
 
             AllTechnologies = new ObservableCollection<Technology>();
             SelectedTechnologies = new ObservableCollection<object>();
@@ -35,21 +39,34 @@ namespace AgentRecruiter.ViewModels
         {
             IsBusy = true;
 
-            var technologies = await recruitmentQueryService.GetTechnologiesAsync();
-
-            AllTechnologies.Clear();
-
-            foreach (var technology in technologies)
+            try
             {
-                AllTechnologies.Add(technology);
-            }
+                var technologies = await recruitmentQueryService.GetTechnologiesAsync();
 
-            foreach (var technology in dataService.Query.Technologies)
+                AllTechnologies.Clear();
+
+                foreach (var technology in technologies)
+                {
+                    AllTechnologies.Add(technology);
+                }
+
+                foreach (var technology in dataService.Query.Technologies)
+                {
+                    SelectedTechnologies.Add(AllTechnologies.OfType<Technology>().First(t => t.Name == technology.Name));
+                }
+            }
+            catch (HttpRequestException exc)
             {
-                SelectedTechnologies.Add(AllTechnologies.OfType<Technology>().First(t => t.Name == technology.Name));
+                await alertService.DisplayAlertAsync("Service Error", "Could not retrieve technologies.", "OK");
             }
-
-            IsBusy = false;
+            catch (Exception e)
+            {
+                await alertService.DisplayAlertAsync(string.Empty, "Something went wrong", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task ExecuteSaveCommand()

@@ -4,7 +4,9 @@ using MLToolkit.Forms.SwipeCardView.Core;
 
 using RecruitmentService.Client;
 
+using System;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,10 +18,12 @@ namespace AgentRecruiter.ViewModels
     public class SwipeMatchesViewModel : BaseViewModel
     {
         private readonly IRecruitmentQueryService recruitmentQueryService;
+        private readonly IAlertService alertService;
 
-        public SwipeMatchesViewModel(IRecruitmentQueryService recruitmentQueryService)
+        public SwipeMatchesViewModel(IRecruitmentQueryService recruitmentQueryService, IAlertService alertService)
         {
             this.recruitmentQueryService = recruitmentQueryService;
+            this.alertService = alertService;
 
             Matches = new ObservableCollection<Candidate>();
 
@@ -32,18 +36,31 @@ namespace AgentRecruiter.ViewModels
         {
             IsBusy = true;
 
-            await recruitmentQueryService.InitializeAsync();
-
-            var matches = await recruitmentQueryService.GetMatchingCandidatesAsync();
-
-            Matches.Clear();
-
-            foreach (var match in matches)
+            try
             {
-                Matches.Add(match);
-            }
+                await recruitmentQueryService.InitializeAsync();
 
-            IsBusy = false;
+                var matches = await recruitmentQueryService.GetMatchingCandidatesAsync();
+
+                Matches.Clear();
+
+                foreach (var match in matches)
+                {
+                    Matches.Add(match);
+                }
+            }
+            catch (HttpRequestException exc)
+            {
+                await alertService.DisplayAlertAsync("Service Error", "Could not get matches.", "OK");
+            }
+            catch (Exception exc)
+            {
+                await alertService.DisplayAlertAsync(string.Empty, "Something went wrong", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async void OnSwipe(SwipedCardEventArgs obj)

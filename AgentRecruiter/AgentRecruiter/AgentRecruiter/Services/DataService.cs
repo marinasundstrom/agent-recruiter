@@ -9,7 +9,7 @@ using Xamarin.Essentials;
 
 namespace AgentRecruiter.Services
 {
-    class DataService : IDataService
+    sealed class DataService : IDataService
     {
         private const string QueryFilePath = "query.json";
         private const string CandidatesAcceptedPath = "candidates-accepted.json";

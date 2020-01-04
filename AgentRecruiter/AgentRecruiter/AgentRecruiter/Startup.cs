@@ -64,6 +64,8 @@ namespace AgentRecruiter
             services.AddSingleton<IDataService, DataService>();
             services.AddTransient<IRecruitmentQueryService, RecruitmentQueryService>();
 
+            services.AddSingleton<IAlertService, AlertService>();
+
             services.AddHttpClient<IRecruitmentServiceClient, RecruitmentServiceClient>((sp, httpClient) =>
             {
                 var serviceEndpoint = sp
