@@ -12,7 +12,11 @@
     <ContentPage.Content>
         <StackLayout>
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-            <ListView BackgroundColor="Transparent" ItemsSource="{Binding Candidates}">
+            <ListView
+                x:Name="ListView"
+                BackgroundColor="Transparent"
+                ItemSelected="ListView_ItemSelected"
+                ItemsSource="{Binding Candidates}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Name.FirstName}" />
