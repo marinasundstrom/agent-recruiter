@@ -2,7 +2,6 @@
 
 using RecruitmentService.Client;
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace AgentRecruiter.ViewModels
     {
         private readonly IRecruitmentQueryService recruitmentQueryService;
         private readonly IDataService dataService;
-        private List<object> selectedTechnologies;
+        private ObservableCollection<object> selectedTechnologies;
 
         public MatchCriteriaViewModel(IRecruitmentQueryService recruitmentQueryService, IDataService dataService)
         {
@@ -24,7 +23,7 @@ namespace AgentRecruiter.ViewModels
             this.dataService = dataService;
 
             AllTechnologies = new ObservableCollection<Technology>();
-            SelectedTechnologies = new List<object>();
+            SelectedTechnologies = new ObservableCollection<object>();
 
             SaveCommand = new Command(async () => await ExecuteSaveCommand());
         }
@@ -64,7 +63,7 @@ namespace AgentRecruiter.ViewModels
 
         public ObservableCollection<Technology> AllTechnologies { get; }
 
-        public List<object> SelectedTechnologies
+        public ObservableCollection<object> SelectedTechnologies
         {
             get => selectedTechnologies;
             set => SetProperty(ref selectedTechnologies, value);
