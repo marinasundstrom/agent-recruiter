@@ -65,6 +65,7 @@ namespace AgentRecruiter
             services.AddTransient<IRecruitmentQueryService, RecruitmentQueryService>();
 
             services.AddSingleton<IAlertService, AlertService>();
+            services.AddSingleton<IVibrationService, VibrationService>();
 
             services.AddHttpClient<IRecruitmentServiceClient, RecruitmentServiceClient>((sp, httpClient) =>
             {

@@ -10,7 +10,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace AgentRecruiter.ViewModels
@@ -19,11 +18,16 @@ namespace AgentRecruiter.ViewModels
     {
         private readonly IRecruitmentQueryService recruitmentQueryService;
         private readonly IAlertService alertService;
+        private readonly IVibrationService vibrationService;
 
-        public SwipeMatchesViewModel(IRecruitmentQueryService recruitmentQueryService, IAlertService alertService)
+        public SwipeMatchesViewModel(
+            IRecruitmentQueryService recruitmentQueryService,
+            IAlertService alertService,
+            IVibrationService vibrationService)
         {
             this.recruitmentQueryService = recruitmentQueryService;
             this.alertService = alertService;
+            this.vibrationService = vibrationService;
 
             Matches = new ObservableCollection<Candidate>();
 
@@ -81,8 +85,7 @@ namespace AgentRecruiter.ViewModels
         {
             await recruitmentQueryService.AcceptCandidateAsync(candidate);
 
-            // TODO: Put in its own service to enable unit testing.
-            Vibration.Vibrate();
+            await vibrationService.VibrateAsync();
         }
 
         private async Task RejectCandidateAsync(Candidate candidate)
