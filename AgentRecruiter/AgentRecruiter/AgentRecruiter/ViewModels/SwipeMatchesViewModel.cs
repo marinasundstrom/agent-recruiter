@@ -6,6 +6,7 @@ using RecruitmentService.Client;
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,11 +15,12 @@ using Xamarin.Forms;
 
 namespace AgentRecruiter.ViewModels
 {
-    public class SwipeMatchesViewModel : BaseViewModel
+    public class SwipeMatchesViewModel : BaseViewModel, IDisposable
     {
         private readonly IRecruitmentQueryService recruitmentQueryService;
         private readonly IAlertService alertService;
         private readonly IVibrationService vibrationService;
+        private bool hasNoMatches;
 
         public SwipeMatchesViewModel(
             IRecruitmentQueryService recruitmentQueryService,
@@ -30,10 +32,16 @@ namespace AgentRecruiter.ViewModels
             this.vibrationService = vibrationService;
 
             Matches = new ObservableCollection<Candidate>();
+            Matches.CollectionChanged += Matches_CollectionChanged;
 
             SwipeCommand = new Command<SwipedCardEventArgs>(OnSwipe);
 
-            Title = "Swipe";
+            Title = "Matches";
+        }
+
+        private void Matches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            HasNoMatches = !Matches.Any();
         }
 
         public async Task InitializeAsync()
@@ -93,8 +101,19 @@ namespace AgentRecruiter.ViewModels
             await recruitmentQueryService.RejectCandidateAsync(candidate);
         }
 
+        public void Dispose()
+        {
+            Matches.CollectionChanged -= Matches_CollectionChanged;
+        }
+
         public ObservableCollection<Candidate> Matches { get; }
 
         public ICommand SwipeCommand { get; }
+
+        public bool HasNoMatches
+        {
+            get => hasNoMatches;
+            private set => SetProperty(ref hasNoMatches, value);
+        }
     }
 }

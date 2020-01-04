@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AgentRecruiter.Views;
 
 using Xamarin.Forms;
 
@@ -10,6 +9,8 @@ namespace AgentRecruiter
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("matchcriteria", typeof(MatchCriteriaPage));
         }
     }
 }

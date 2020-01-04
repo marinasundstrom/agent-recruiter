@@ -11,8 +11,18 @@
     BindingContext="{x:Static vm:ViewModelLocator.SwipeMatches}"
     mc:Ignorable="d">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout VerticalOptions="CenterAndExpand">
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <StackLayout IsVisible="{Binding HasNoMatches}">
+                <Label
+                    HorizontalTextAlignment="Center"
+                    Text="No matches"
+                    VerticalTextAlignment="Center" />
+                <Button
+                    x:Name="GoToMatchCriteriaButton"
+                    Clicked="GoToMatchCriteriaButton_Clicked"
+                    Text="Adjust match criteria" />
+            </StackLayout>
             <swipeCardView:SwipeCardView
                 Margin="0,10,0,0"
                 ItemsSource="{Binding Matches}"

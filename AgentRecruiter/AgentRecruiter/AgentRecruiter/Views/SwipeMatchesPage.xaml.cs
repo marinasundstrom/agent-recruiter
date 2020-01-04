@@ -19,5 +19,10 @@ namespace AgentRecruiter.Views
 
             base.OnAppearing();
         }
+
+        private async void GoToMatchCriteriaButton_Clicked(object sender, System.EventArgs e)
+        {
+            await Shell.Current.GoToAsync("matchcriteria");
+        }
     }
 }

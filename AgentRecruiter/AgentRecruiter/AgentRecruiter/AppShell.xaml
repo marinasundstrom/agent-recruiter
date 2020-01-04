@@ -30,22 +30,16 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <FlyoutItem Title="Matches" Icon="tab_feed.png">
+    <TabBar>
         <Tab Title="Matches" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:SwipeMatchesPage}" />
         </Tab>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Match Criteria" Icon="tab_feed.png">
-        <Tab Title="Match Criteria" Icon="tab_feed.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MatchCriteriaPage}" />
-        </Tab>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Candidates" Icon="tab_feed.png">
         <Tab Title="Candidates" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:CandidatesPage}" />
         </Tab>
-    </FlyoutItem>
+        <Tab Title="Match Criteria" Icon="tab_feed.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MatchCriteriaPage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>
