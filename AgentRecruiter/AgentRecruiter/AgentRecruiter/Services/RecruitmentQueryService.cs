@@ -1,4 +1,6 @@
-﻿using RecruitmentService.Client;
+﻿using AutoMapper;
+
+using RecruitmentService.Client;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +11,16 @@ namespace AgentRecruiter.Services
 {
     public sealed class RecruitmentQueryService : IRecruitmentQueryService
     {
-        private const int CandidateResultLimit = 100;
-        private const int TechnologiesResultLimit = 100;
-
         private readonly IRecruitmentServiceClient recruitmentServiceClient;
         private readonly IDataService dataService;
-
+        private readonly IMapper mapper;
         private bool initalized = false;
 
-        public RecruitmentQueryService(IRecruitmentServiceClient recruitmentServiceClient, IDataService dataService)
+        public RecruitmentQueryService(IRecruitmentServiceClient recruitmentServiceClient, IDataService dataService, IMapper mapper)
         {
             this.recruitmentServiceClient = recruitmentServiceClient;
             this.dataService = dataService;
+            this.mapper = mapper;
         }
 
         public async Task InitializeAsync()
@@ -35,51 +35,62 @@ namespace AgentRecruiter.Services
             initalized = true;
         }
 
-        public async Task<IEnumerable<Technology>> GetTechnologiesAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Models.Technology>> GetTechnologiesAsync(CancellationToken cancellationToken = default)
         {
+            if (await dataService.HasTechnologiesAsync())
+            {
+                // INFO: Load technologies from database.
+                return await dataService.GetTechnologiesAsync();
+            }
+
+            // WARNING: This will take some time the first time the app opens.
+
             var technologies = await recruitmentServiceClient.GetTechnologiesAsync(cancellationToken);
-            return technologies
-                .Take(TechnologiesResultLimit)
+
+            var mappedTechnologies =
+                mapper.ProjectTo<Models.Technology>(technologies.AsQueryable())
+                //.Take(TechnologiesResultLimit)
                 .ToList();
+
+            await dataService.UpdateTechnologiesAsync(mappedTechnologies);
+
+            return mappedTechnologies;
         }
 
-        public async Task<IEnumerable<Candidate>> GetMatchingCandidatesAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Models.Candidate>> GetMatchingCandidatesAsync(CancellationToken cancellationToken = default)
         {
             var query = dataService.Query.Technologies.Select(t => t.Name);
 
-            var acceptedCandidates = dataService.AcceptedCandidates;
-            var rejectedCandidates = dataService.RejectedCandidates;
+            var acceptedCandidates = await dataService.GetAcceptedCandidatesAsync();
+            var rejectedCandidates = await dataService.GetRejectedCandidatesAsync();
 
-            var candidates = await recruitmentServiceClient.GetCandidatesAsync(cancellationToken);
+            var candidates =
+               await recruitmentServiceClient.GetCandidatesAsync(cancellationToken);
 
             var matchingCandidates = candidates
                 .Where(candidate => candidate.IsActive)
                 .Where(candidate => candidate.Technologies.Any(c => query.Contains(c.Name)));
 
-            return matchingCandidates
-                .Where(c => !rejectedCandidates.Any(c2 => c2 == c.Id))
-                .Where(c => !acceptedCandidates.Any(c2 => c2.Id == c.Id))
-                .Take(CandidateResultLimit)
-                .ToList();
+            var newCandidates = matchingCandidates
+                .Where(c => !rejectedCandidates.Any(c2 => c2.Id == c.Id))
+                .Where(c => !acceptedCandidates.Any(c2 => c2.Id == c.Id));
+
+            return mapper.ProjectTo<Models.Candidate>(newCandidates.AsQueryable());
         }
 
-        public async Task AcceptCandidateAsync(Candidate candidate)
+        public async Task AcceptCandidateAsync(Models.Candidate candidate)
         {
-            dataService.AcceptedCandidates.Add(candidate);
-
-            await dataService.SaveAsync();
+            await dataService.AddAcceptedCandidateAsync(candidate);
         }
 
-        public async Task RejectCandidateAsync(Candidate candidate)
+        public async Task RejectCandidateAsync(Models.Candidate candidate)
         {
-            dataService.RejectedCandidates.Add(candidate.Id);
-
-            await dataService.SaveAsync();
+            await dataService.AddRejectedCandidateAsync(candidate);
         }
 
-        public Task<IEnumerable<Candidate>> GetAcceptedCandidatesAsync()
+        public async Task<IEnumerable<Models.Candidate>> GetAcceptedCandidatesAsync()
         {
-            return Task.FromResult<IEnumerable<Candidate>>(dataService.AcceptedCandidates.ToList());
+            return await dataService.GetAcceptedCandidatesAsync();
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using RecruitmentService.Client;
+﻿using AgentRecruiter.Data;
+using AgentRecruiter.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,21 +16,49 @@ namespace AgentRecruiter.Services
     sealed class DataService : IDataService
     {
         private const string QueryFilePath = "query.json";
-        private const string CandidatesAcceptedPath = "candidates-accepted.json";
-        private const string CandidatesRejectedPath = "candidates-rejected.json";
+        private readonly ApplicationDbContext context;
 
-        public DataService()
+        public DataService(ApplicationDbContext context)
         {
             Query = new Query();
-            AcceptedCandidates = new List<Candidate>();
-            RejectedCandidates = new List<string>();
+            this.context = context;
         }
 
         public Query Query { get; private set; }
 
-        public IList<Candidate> AcceptedCandidates { get; private set; }
+        public async Task AddAcceptedCandidateAsync(Candidate candidate)
+        {
+            candidate.IsAccepted = true;
+            await context.AcceptedCandidates.AddAsync(candidate);
+            await context.SaveChangesAsync();
+        }
 
-        public IList<string> RejectedCandidates { get; private set; }
+        public async Task AddRejectedCandidateAsync(Candidate candidate)
+        {
+            candidate.IsAccepted = false;
+            await context.RejectedCandidates.AddAsync(candidate);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Candidate>> GetAcceptedCandidatesAsync()
+        {
+            return await context.AcceptedCandidates.Where(c => c.IsAccepted).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Candidate>> GetRejectedCandidatesAsync()
+        {
+            return await context.RejectedCandidates.Where(c => !c.IsAccepted).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Technology>> GetTechnologiesAsync()
+        {
+            return await context.Technologies.ToArrayAsync();
+        }
+
+        public async Task<bool> HasTechnologiesAsync()
+        {
+            return await context.Technologies.AnyAsync();
+        }
 
         public Task LoadAsync()
         {
@@ -34,18 +66,6 @@ namespace AgentRecruiter.Services
             if (File.Exists(path))
             {
                 this.Query = JsonSerializer.Deserialize<Query>(File.ReadAllText(path));
-            }
-
-            path = Path.Combine(FileSystem.AppDataDirectory, CandidatesAcceptedPath);
-            if (File.Exists(path))
-            {
-                this.AcceptedCandidates = JsonSerializer.Deserialize<List<Candidate>>(File.ReadAllText(path));
-            }
-
-            path = Path.Combine(FileSystem.AppDataDirectory, CandidatesRejectedPath);
-            if (File.Exists(path))
-            {
-                this.RejectedCandidates = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(path));
             }
 
             return Task.CompletedTask;
@@ -56,13 +76,24 @@ namespace AgentRecruiter.Services
             var path = Path.Combine(FileSystem.AppDataDirectory, QueryFilePath);
             File.WriteAllText(path, JsonSerializer.Serialize(this.Query));
 
-            path = Path.Combine(FileSystem.AppDataDirectory, CandidatesAcceptedPath);
-            File.WriteAllText(path, JsonSerializer.Serialize(this.AcceptedCandidates));
-
-            path = Path.Combine(FileSystem.AppDataDirectory, CandidatesRejectedPath);
-            File.WriteAllText(path, JsonSerializer.Serialize(this.RejectedCandidates));
-
             return Task.CompletedTask;
+        }
+
+        public async Task UpdateTechnologiesAsync(IEnumerable<Technology> technologies)
+        {
+            foreach (var technology in technologies)
+            {
+                if (await context.Technologies.AnyAsync(t => t.Name == technology.Name))
+                {
+                    context.Technologies.Update(technology);
+                }
+                else
+                {
+                    context.Technologies.Add(technology);
+                }
+            }
+
+            await context.SaveChangesAsync();
         }
     }
 }

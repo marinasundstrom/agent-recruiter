@@ -1,4 +1,5 @@
-﻿using RecruitmentService.Client;
+﻿
+using AgentRecruiter.Models;
 
 using System.Collections.Generic;
 

@@ -1,5 +1,4 @@
-﻿using RecruitmentService.Client;
-
+﻿
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,12 +9,14 @@ namespace AgentRecruiter.Services
     {
         Task InitializeAsync();
 
-        Task<IEnumerable<Candidate>> GetMatchingCandidatesAsync(CancellationToken cancellationToken = default);
-        Task<IEnumerable<Technology>> GetTechnologiesAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Models.Candidate>> GetMatchingCandidatesAsync(CancellationToken cancellationToken = default);
+       
+        Task<IEnumerable<Models.Technology>> GetTechnologiesAsync(CancellationToken cancellationToken = default);
 
-        Task AcceptCandidateAsync(Candidate candidate);
-        Task RejectCandidateAsync(Candidate candidate);
+        Task AcceptCandidateAsync(Models.Candidate candidate);
 
-        Task<IEnumerable<Candidate>> GetAcceptedCandidatesAsync();
+        Task RejectCandidateAsync(Models.Candidate candidate);
+
+        Task<IEnumerable<Models.Candidate>> GetAcceptedCandidatesAsync();
     }
 }

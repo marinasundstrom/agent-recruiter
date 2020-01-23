@@ -1,6 +1,5 @@
-﻿using AgentRecruiter.Services;
-
-using RecruitmentService.Client;
+﻿using AgentRecruiter.Models;
+using AgentRecruiter.Services;
 
 using System;
 using System.Collections.ObjectModel;

@@ -1,8 +1,7 @@
-﻿using AgentRecruiter.Services;
+﻿using AgentRecruiter.Models;
+using AgentRecruiter.Services;
 
 using MLToolkit.Forms.SwipeCardView.Core;
-
-using RecruitmentService.Client;
 
 using System;
 using System.Collections.ObjectModel;

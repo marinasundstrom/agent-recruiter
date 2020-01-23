@@ -1,7 +1,11 @@
-﻿using AgentRecruiter.Helpers;
+﻿using AgentRecruiter.Data;
+using AgentRecruiter.Helpers;
 using AgentRecruiter.Services;
 using AgentRecruiter.ViewModels;
 
+using AutoMapper;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,11 +17,14 @@ using System;
 using System.IO;
 
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace AgentRecruiter
 {
     public class Startup
     {
+        private const string databaseName = "database.db";
+
         public static App Init(Action<HostBuilderContext, IServiceCollection> nativeConfigureServices = null)
         {
             string systemDir = FileSystem.CacheDirectory;
@@ -46,6 +53,10 @@ namespace AgentRecruiter
                             }))
                             .Build();
 
+            var dbContext = host.Services.GetService<ApplicationDbContext>();
+            //dbContext.Database.EnsureDeleted();
+            dbContext.Database.EnsureCreated();
+
             App.ServiceProvider = host.Services;
             ViewModelLocator.ServiceProvider = host.Services;
 
@@ -54,6 +65,26 @@ namespace AgentRecruiter
 
         private static void ConfigureServices(HostBuilderContext ctx, IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
+            {
+                String databasePath = "";
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.iOS:
+                        SQLitePCL.Batteries_V2.Init();
+                        databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "..", "Library", databaseName); ;
+                        break;
+                    case Device.Android:
+                        databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), databaseName);
+                        break;
+                    default:
+                        throw new NotImplementedException("Platform not supported");
+                }
+                optionsBuilder.UseSqlite($"Filename={databasePath}");
+            });
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
             services.AddTransient<AppShell>();
             services.AddSingleton<App>();
 

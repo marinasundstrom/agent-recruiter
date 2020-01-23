@@ -1,6 +1,5 @@
-﻿using AgentRecruiter.Services;
-
-using RecruitmentService.Client;
+﻿using AgentRecruiter.Models;
+using AgentRecruiter.Services;
 
 using System;
 using System.Collections.ObjectModel;
@@ -22,7 +21,6 @@ namespace AgentRecruiter.ViewModels
 
             Title = "Candidates";
         }
-
 
         public async Task InitializeAsync()
         {
