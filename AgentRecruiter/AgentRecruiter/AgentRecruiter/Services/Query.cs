@@ -1,12 +1,12 @@
 ﻿
-using AgentRecruiter.Models;
-
 using System.Collections.Generic;
 
 namespace AgentRecruiter.Services
 {
     public class Query
     {
-        public IList<Technology> Technologies { get; set; } = new List<Technology>();
+        public IList<string> Technologies { get; set; } = new List<string>();
+
+        public int YearsOfExperience { get; set; }
     }
 }

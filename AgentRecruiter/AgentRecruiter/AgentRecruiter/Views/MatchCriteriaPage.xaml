@@ -3,30 +3,57 @@
     x:Class="AgentRecruiter.Views.MatchCriteriaPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AgentRecruiter.Converters"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:forms="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
+    xmlns:local="clr-namespace:AgentRecruiter.Behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:AgentRecruiter.ViewModels"
     Title="{Binding Title}"
     BindingContext="{x:Static vm:ViewModelLocator.MatchCriteria}"
     mc:Ignorable="d">
+    <ContentPage.Resources>
+        <converters:AutoSuggestBoxQuerySubmittedEventArgsConverter x:Key="AutoSuggestBoxQuerySubmittedEventArgsConverter" />
+        <converters:AutoSuggestBoxSuggestionChosenEventArgsConverter x:Key="AutoSuggestBoxSuggestionChosenEventArgsConverter" />
+        <converters:AutoSuggestBoxTextChangedEventArgsConverter x:Key="AutoSuggestBoxTextChangedEventArgsConverter" />
+        <converters:StringToInt32Converter x:Key="StringToInt32Converter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="20">
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-            <CollectionView
-                ItemsSource="{Binding AllTechnologies}"
-                SelectedItems="{Binding SelectedTechnologies, Mode=TwoWay}"
-                SelectionMode="Multiple"
-                VerticalOptions="Fill">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding Name}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Button
-                Command="{Binding SaveCommand}"
-                Text="Save"
-                VerticalOptions="End" />
+            <Label Text="Technology" />
+            <forms:AutoSuggestBox
+                ItemsSource="{Binding TechnologySuggestions}"
+                PlaceholderText="Search"
+                Text="{Binding Technology, Mode=TwoWay}"
+                WidthRequest="200">
+                <forms:AutoSuggestBox.Behaviors>
+                    <local:EventToCommandBehavior
+                        Command="{Binding TechnologyQuerySubmittedCommand}"
+                        Converter="{StaticResource AutoSuggestBoxQuerySubmittedEventArgsConverter}"
+                        EventName="QuerySubmitted" />
+                    <local:EventToCommandBehavior
+                        Command="{Binding TechnologySuggestionChosenCommand}"
+                        Converter="{StaticResource AutoSuggestBoxSuggestionChosenEventArgsConverter}"
+                        EventName="SuggestionChosen" />
+                    <local:EventToCommandBehavior
+                        Command="{Binding TechnologyTextChangedCommand}"
+                        Converter="{StaticResource AutoSuggestBoxTextChangedEventArgsConverter}"
+                        EventName="TextChanged" />
+                </forms:AutoSuggestBox.Behaviors>
+            </forms:AutoSuggestBox>
+            <Label Text="Experience" />
+            <StackLayout Orientation="Horizontal">
+                <Entry
+                    Keyboard="Numeric"
+                    Text="{Binding YearsOfExperience, Converter={StaticResource StringToInt32Converter}}"
+                    WidthRequest="40">
+                    <Entry.Behaviors>
+                        <local:NumericValidationBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="years" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

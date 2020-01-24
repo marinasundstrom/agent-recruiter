@@ -22,7 +22,7 @@ namespace AgentRecruiter.Views
 
         private async void GoToMatchCriteriaButton_Clicked(object sender, System.EventArgs e)
         {
-            await Shell.Current.GoToAsync("matchcriteria");
+            await (App.Current.MainPage as Xamarin.Forms.Shell).GoToAsync("//tabbar/tab/matchcriteria", true);
         }
     }
 }

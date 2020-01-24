@@ -30,15 +30,18 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <TabBar>
+    <TabBar Route="tabbar">
         <Tab Title="Matches" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:SwipeMatchesPage}" />
         </Tab>
         <Tab Title="Candidates" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:CandidatesPage}" />
         </Tab>
-        <Tab Title="Match Criteria" Icon="tab_feed.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MatchCriteriaPage}" />
+        <Tab
+            Title="Match Criteria"
+            Icon="tab_feed.png"
+            Route="tab">
+            <ShellContent ContentTemplate="{DataTemplate local:MatchCriteriaPage}" Route="matchcriteria" />
         </Tab>
     </TabBar>
 

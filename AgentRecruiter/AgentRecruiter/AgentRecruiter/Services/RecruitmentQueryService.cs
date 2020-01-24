@@ -59,7 +59,7 @@ namespace AgentRecruiter.Services
 
         public async Task<IEnumerable<Models.Candidate>> GetMatchingCandidatesAsync(CancellationToken cancellationToken = default)
         {
-            var query = dataService.Query.Technologies.Select(t => t.Name);
+            var query = dataService.Query;
 
             var acceptedCandidates = await dataService.GetAcceptedCandidatesAsync();
             var rejectedCandidates = await dataService.GetRejectedCandidatesAsync();
@@ -69,7 +69,7 @@ namespace AgentRecruiter.Services
 
             var matchingCandidates = candidates
                 .Where(candidate => candidate.IsActive)
-                .Where(candidate => candidate.Technologies.Any(c => query.Contains(c.Name)));
+                .Where(candidate => candidate.Technologies.Any(c => query.Technologies.Contains(c.Name) && c.ExperienceYears >= query.YearsOfExperience));
 
             var newCandidates = matchingCandidates
                 .Where(c => !rejectedCandidates.Any(c2 => c2.Id == c.Id))
