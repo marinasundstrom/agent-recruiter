@@ -2,7 +2,7 @@
 using AgentRecruiter.Models;
 
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace AgentRecruiter.Services
             var path = Path.Combine(FileSystem.AppDataDirectory, QueryFilePath);
             if (File.Exists(path))
             {
-                this.Query = JsonSerializer.Deserialize<Query>(File.ReadAllText(path));
+                this.Query = JsonConvert.DeserializeObject<Query>(File.ReadAllText(path));
             }
 
             return Task.CompletedTask;
@@ -74,7 +74,7 @@ namespace AgentRecruiter.Services
         public Task SaveAsync()
         {
             var path = Path.Combine(FileSystem.AppDataDirectory, QueryFilePath);
-            File.WriteAllText(path, JsonSerializer.Serialize(this.Query));
+            File.WriteAllText(path, JsonConvert.SerializeObject(this.Query));
 
             return Task.CompletedTask;
         }

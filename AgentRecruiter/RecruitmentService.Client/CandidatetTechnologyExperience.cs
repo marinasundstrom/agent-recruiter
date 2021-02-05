@@ -1,14 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace RecruitmentService.Client
 {
 
     public class CandidatetTechnologyExperience
     {
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("experianceYears")]
+        [JsonProperty("experianceYears")]
         public int ExperienceYears { get; set; }
     }
 

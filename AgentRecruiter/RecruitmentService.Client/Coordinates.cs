@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace RecruitmentService.Client
 {
     public struct Coordinates
     {
-        [JsonPropertyName("latitude")]
+        [JsonProperty("latitude")]
         public string Latitude { get; set; }
 
-        [JsonPropertyName("longitude")]
+        [JsonProperty("longitude")]
         public string Longitude { get; set; }
 
         public override string ToString()

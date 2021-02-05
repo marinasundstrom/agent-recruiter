@@ -1,68 +1,68 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace RecruitmentService.Client
 {
     public class Candidate
     {
-        [JsonPropertyName("_id")]
+        [JsonProperty("_id")]
         public string Id { get; set; }
 
-        [JsonPropertyName("index")]
+        [JsonProperty("index")]
         public int Index { get; set; }
 
-        [JsonPropertyName("guid")]
+        [JsonProperty("guid")]
         public string Guid { get; set; }
 
-        [JsonPropertyName("isActive")]
+        [JsonProperty("isActive")]
         public bool IsActive { get; set; }
 
-        [JsonPropertyName("age")]
+        [JsonProperty("age")]
         public int Age { get; set; }
 
-        [JsonPropertyName("showSize")]
+        [JsonProperty("showSize")]
         public int ShowSize { get; set; }
 
-        [JsonPropertyName("eyeColor")]
+        [JsonProperty("eyeColor")]
         public string EyeColor { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public CandidateName Name { get; set; }
 
-        [JsonPropertyName("currentCompany")]
+        [JsonProperty("currentCompany")]
         public string CurrentCompany { get; set; }
 
-        [JsonPropertyName("picture")]
+        [JsonProperty("picture")]
         public Uri Picture { get; set; }
 
-        [JsonPropertyName("email")]
+        [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonPropertyName("phone")]
+        [JsonProperty("phone")]
         public string Phone { get; set; }
 
-        [JsonPropertyName("address")]
+        [JsonProperty("address")]
         public string Address { get; set; }
 
-        [JsonPropertyName("about")]
+        [JsonProperty("about")]
         public string About { get; set; }
 
-        [JsonPropertyName("fullResume")]
+        [JsonProperty("fullResume")]
         public string FullResume { get; set; }
 
-        [JsonPropertyName("registered")]
+        [JsonProperty("registered")]
         public string Registered { get; set; }
 
-        [JsonPropertyName("lastKnownLocation")]
+        [JsonProperty("lastKnownLocation")]
         public Coordinates LastKnownLocation { get; set; }
 
-        [JsonPropertyName("technologies")]
+        [JsonProperty("technologies")]
         public CandidatetTechnologyExperience[] Technologies { get; set; }
 
-        [JsonPropertyName("languages")]
+        [JsonProperty("languages")]
         public string[] Languages { get; set; }
 
-        [JsonPropertyName("favoriteFruit")]
+        [JsonProperty("favoriteFruit")]
         public string FavoriteFruit { get; set; }
     }
 

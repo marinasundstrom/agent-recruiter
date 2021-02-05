@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace RecruitmentService.Client
 {
     public class CandidateName
     {
-        [JsonPropertyName("first")]
+        [JsonProperty("first")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("last")]
+        [JsonProperty("last")]
         public string LastName { get; set; }
 
         public override string ToString()

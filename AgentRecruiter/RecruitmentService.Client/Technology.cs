@@ -1,29 +1,29 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace RecruitmentService.Client
 {
     public class Technology
     {
-        [JsonPropertyName("votes")]
+        [JsonProperty("votes")]
         public long Votes { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public Uri Url { get; set; }
 
-        [JsonPropertyName("fans")]
+        [JsonProperty("fans")]
         public long Fans { get; set; }
 
-        [JsonPropertyName("logo")]
+        [JsonProperty("logo")]
         public Uri Logo { get; set; }
 
-        [JsonPropertyName("stacks")]
+        [JsonProperty("stacks")]
         public long Stacks { get; set; }
 
-        [JsonPropertyName("description")]
+        [JsonProperty("description")]
         public string Description { get; set; }
 
         public override string ToString()
