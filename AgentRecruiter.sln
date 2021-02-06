@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{33FD35CD-4AAB-4D58-AF76-9F23AC0991A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{105A973D-34C6-441F-9FC9-671485E17B57}"
+	ProjectSection(SolutionItems) = preProject
+		INSTRUCTIONS.md = INSTRUCTIONS.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
