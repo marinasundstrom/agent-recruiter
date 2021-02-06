@@ -1,4 +1,4 @@
-# Agent Recruiter (Xamarin.Forms app)
+# Agent Recruiter
 
 Work test from January, 2020 - Client app written in Xamarin.Forms.
 
