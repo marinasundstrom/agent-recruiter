@@ -4,6 +4,8 @@ Work test from January, 2020 - Client app written in Xamarin.Forms.
 
 It contains the app and models that represents the data received from the API.
 
+Watch video [here](https://youtu.be/PwTOJAMI2eM). Screenshots below.
+
 ## The task
 
 Read about the full task here: [INSTRUCTIONS.md](INSTRUCTIONS.md)
